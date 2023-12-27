@@ -55,6 +55,44 @@ void callback_adc_fun(void)
 
 //===============================FEATURES=====================================
 //Your functions will go here, like reset and such. Please make them STATIC.
+static STD_Type APP_ACControl(void)
+{
+	STD_Type LOC_u8ReturnValue= E_NOT_OK;
+	u16 LOC_u16SensorRead;
+	u16 LOC_u16Temperature;
+
+	MCAL_ADC_u8StartConversion();
+	MCAL_ADC_u8GetConversion(&LOC_u16SensorRead,ADC0);
+	LOC_u16Temperature = ((LOC_u16SensorRead*Unit_Conversion)-FIVE_HUNDERED)/TEN ;             //convert the sensor read to degree Celsius 
+
+	if(LOC_u16Temperature)
+	{
+		MCAL_DIO_u8SetPinDirection(DIO_PortD,Pin2,DIO_OUTPUT);
+
+		if(LOC_u16Temperature>MAX_TEMP)                                                       //max temp is 28 
+		{
+			MCAL_DIO_u8SetPinValue(DIO_PortD,Pin2,DIO_HIGH);
+			LOC_u8ReturnValue= E_OK;
+		}
+		else if (LOC_u16Temperature<MIN_TEMP)                                                 //min temp is 21
+		{
+			MCAL_DIO_u8SetPinValue(DIO_PortD,Pin2,DIO_LOW);
+			LOC_u8ReturnValue= E_OK;
+		}
+		LOC_u8ReturnValue= E_OK;
+	}
+	else
+	{
+	//Do Nothing
+	}
+
+
+	LOC_u8ReturnValue= E_OK;
+
+	return LOC_u8ReturnValue;
+}
+
+
 static STD_Type APP_SMART_HOME_u8Reset(void)
 {
 	STD_Type LOC_u8ReturnValue = E_NOT_OK;
