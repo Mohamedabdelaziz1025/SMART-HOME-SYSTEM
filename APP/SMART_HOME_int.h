@@ -38,7 +38,7 @@ STD_Type APP_SMART_HOME_u8App(void);	//Main application function to be run in ma
 
 //============================FEATURES======================================
 
-//add your declration function here
+static STD_Type APP_ACControl(void);
 
 //==========================================================================
 
